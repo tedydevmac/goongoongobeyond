@@ -1,0 +1,10 @@
+.git
+.venv
+__pycache__
+*.py[cod]
+.pytest_cache
+runtime.txt
+README.md
+rail_app/README.md
+rail_app/**/__pycache__
+rail_app/models/**/train_features_cache.csv

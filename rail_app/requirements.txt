@@ -1,7 +1,7 @@
 streamlit>=1.30
 pandas
 openpyxl
-numpy
+numpy<2.2
 xgboost
 PyWavelets
-tensorflow>=2.20,<2.22
+tensorflow==2.20.0

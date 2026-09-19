@@ -83,6 +83,51 @@ For a live demo, open the deployed URL in an incognito window and verify that
 the subsystem selector, upload control, prediction button, results table, and
 CSV download all work before recording the demo.
 
+## 2.2 Deploy publicly on Google Cloud Run
+
+The repository includes a Dockerfile for Cloud Run. Cloud Run runs the app as
+a managed public HTTPS service; no local process or VM needs to stay running.
+The container uses Python 3.12 and installs the pinned TensorFlow runtime
+required by the Door and SHM models.
+
+Install and authenticate the Google Cloud CLI, then run these commands from
+the repository root in PowerShell:
+
+```powershell
+gcloud auth login
+gcloud config set project YOUR_PROJECT_ID
+gcloud services enable run.googleapis.com cloudbuild.googleapis.com
+gcloud run deploy rail-cdm `
+  --source . `
+  --region asia-southeast1 `
+  --platform managed `
+  --allow-unauthenticated `
+  --memory 4Gi `
+  --cpu 2 `
+  --timeout 900 `
+  --min 0 `
+  --max 3
+```
+
+Replace `YOUR_PROJECT_ID` and choose a region close to your users. Cloud Build
+builds the root `Dockerfile`, pushes the image, deploys it to Cloud Run, and
+prints the public HTTPS service URL. The `--allow-unauthenticated` flag is
+required for a publicly accessible demo.
+
+After deployment, verify the service before sharing the URL:
+
+```powershell
+$url = gcloud run services describe rail-cdm `
+  --region asia-southeast1 `
+  --format="value(status.url)"
+Invoke-WebRequest "$url/_stcore/health"
+```
+
+The health request should return `ok`. Open `$url` in a browser and test one
+input file for each model whose artifacts are installed. To publish changes,
+run the same `gcloud run deploy` command again; Cloud Run creates a new
+revision and keeps the previous revision available for rollback.
+
 If a subsystem's model isn't in place yet, the app shows a warning and
 disables the Run button for it rather than crashing — the other subsystems
 stay usable.
