@@ -16,7 +16,7 @@ app/
   subsystems/
     __init__.py                 # plugin registry + the contract every subsystem follows
     rail_corrugation.py         # WORKING — wraps the two-stage model
-    door.py                     # schema-tolerant segmentation baseline
+    door.py                     # trained Keras cycle classifier
     acv.py                      # schema-tolerant car-localisation baseline
     shm.py                      # trained Keras damage regression model
   models/
@@ -89,8 +89,11 @@ stay usable.
 
 ## 3. Door / ACV / SHM baselines
 
-Door and ACV include runnable baselines while their trained artifacts are
-being developed. SHM now loads `models/shm/regression_model.keras`, flattens
+ACV includes a runnable baseline while its trained artifact is being
+developed. Door now loads `models/door/status_model.keras` and
+`models/door/status_model_scaling.npz`, segments the stream at 200 ms
+timestamp gaps, normalizes its numeric features, and classifies each segment.
+SHM loads `models/shm/regression_model.keras`, flattens
 the numeric CSV readings, resamples them to the model's required input length,
 and returns the model's numeric regression output. TensorFlow is loaded only
 when SHM inference is requested, and the model is cached for the session.
