@@ -1,14 +1,14 @@
 """
 Subsystem plugin registry.
 
-Each subsystem module (rail_corrugation.py, door.py, acv.py, shm.py) must
+Each subsystem module (rail_corrugation.py, door.py, shm.py) must
 expose this contract:
 
   NAME              - display name shown in the UI dropdown
   OUTPUT_FILENAME   - exact filename required by the submission schema,
                        e.g. "rail_predictions.csv"
   INPUT_MODE        - "multi_file"    : independent files, batch-predicted
-                                         one row per file (Rail, ACV, SHM)
+                                         one row per file (Rail, SHM)
                        "single_stream": ONE continuous unlabeled recording,
                                          segments extracted from it (Door)
   FILE_HINT         - one-line string shown to the user describing what to
@@ -25,7 +25,6 @@ expose this contract:
       required by that subsystem's submission schema (see
       01_Problem_Statement_3_Specifications.md, Deliverables table):
         Rail Corrugation : file_id, prediction
-        ACV              : file_id, ranked_cars
         SHM              : file_id, prediction
         Door             : start_time, end_time, prediction   (no file_id —
                             one row per predicted segment in the stream)
@@ -37,7 +36,6 @@ import importlib
 SUBSYSTEM_MODULES = {
     "Rail Corrugation": "subsystems.rail_corrugation",
     "Door": "subsystems.door",
-    "ACV": "subsystems.acv",
     "SHM": "subsystems.shm",
 }
 

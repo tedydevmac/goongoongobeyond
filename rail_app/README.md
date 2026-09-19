@@ -1,6 +1,6 @@
 # Rail Vehicle Condition Monitoring — App
 
-A single Streamlit dashboard covering all four subsystems (Item 3 of the
+A single Streamlit dashboard covering the three implemented subsystems (Item 3 of the
 Deliverables): choose a subsystem, review its task and expected input,
 upload data file(s), preview the input, monitor inference progress, review
 results, and download the exact submission-schema CSV.
@@ -17,11 +17,10 @@ app/
     __init__.py                 # plugin registry + the contract every subsystem follows
     rail_corrugation.py         # WORKING — wraps the two-stage model
     door.py                     # trained Keras cycle classifier
-    acv.py                      # schema-tolerant car-localisation baseline
     shm.py                      # trained Keras damage regression model
   models/
     rail_corrugation/            # put stage1_model.json, stage2_model.json, config.json here
-    door/  acv/  shm/            # put each subsystem's trained model artifact(s) here
+    door/ shm/                   # put each subsystem's trained model artifact(s) here
 ```
 
 ## 1. Setup
@@ -132,10 +131,9 @@ If a subsystem's model isn't in place yet, the app shows a warning and
 disables the Run button for it rather than crashing — the other subsystems
 stay usable.
 
-## 3. Door / ACV / SHM baselines
+## 3. Door / SHM implementations
 
-ACV includes a runnable baseline while its trained artifact is being
-developed. Door now loads `models/door/status_model.keras` and
+Door loads `models/door/status_model.keras` and
 `models/door/status_model_scaling.npz`, segments the stream at 200 ms
 timestamp gaps, normalizes its numeric features, and classifies each segment.
 SHM loads `models/shm/regression_model.keras`, flattens

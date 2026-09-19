@@ -57,12 +57,6 @@ SUBSYSTEM_DETAILS = {
         "metric": "Normal vs. Abnormal resistance",
         "format": "One continuous CSV stream",
     },
-    "ACV": {
-        "icon": "❄️",
-        "task": "Refrigerant-leak localisation",
-        "metric": "Rank every car by likelihood",
-        "format": "CSV or Excel telemetry files",
-    },
     "SHM": {
         "icon": "📈",
         "task": "Cumulative fatigue-damage regression",
@@ -91,9 +85,6 @@ def _render_result_summary(result_df, subsystem_name):
         c1.metric("Detected cycles", count)
         c2.metric("Normal cycles", count - abnormal)
         c3.metric("Abnormal resistance", abnormal)
-    elif subsystem_name == "ACV":
-        st.metric("Cases processed", count)
-        st.caption("The first car in each ranking is the model's highest-priority inspection candidate.")
     elif subsystem_name == "SHM":
         values = pd.to_numeric(result_df["prediction"], errors="coerce")
         c1, c2 = st.columns(2)
@@ -109,14 +100,12 @@ with st.sidebar:
     st.divider()
     st.markdown("### Workflow")
     st.markdown("1. Select a subsystem\n2. Upload its sensor data\n3. Review the result\n4. Download the submission CSV")
-    st.divider()
-    st.caption("Outputs follow the hackathon submission schemas.")
 
 st.markdown(
     """
     <div class="hero">
       <h1>Rail Vehicle Condition Monitoring</h1>
-      <p>Run condition-monitoring models for four independent train subsystems.</p>
+      <p>Run condition-monitoring models for three independent train subsystems.</p>
     </div>
     """,
     unsafe_allow_html=True,
@@ -152,7 +141,7 @@ else:
 
 st.markdown('<div class="section-title">Upload data</div>', unsafe_allow_html=True)
 st.caption(subsystem.FILE_HINT)
-accepted_types = ["csv", "xlsx", "xls"] if subsystem_name == "ACV" else ["csv"]
+accepted_types = ["csv"]
 if subsystem.INPUT_MODE == "single_stream":
     uploaded = st.file_uploader(
         "Continuous stream file",
