@@ -54,6 +54,8 @@ file(s), click **Run prediction**, review the generated results, then
 
 This repository is configured for Streamlit Community Cloud. The app entrypoint
 is `rail_app/app.py`, and its dependency file is `rail_app/requirements.txt`.
+The root `runtime.txt` pins the Cloud runtime to Python 3.12 because the SHM
+TensorFlow dependency does not provide wheels for every newer Python release.
 
 1. Push the repository to GitHub, including the `rail_app/models/` artifacts.
 2. Open [share.streamlit.io](https://share.streamlit.io/) and sign in with the
@@ -62,9 +64,15 @@ is `rail_app/app.py`, and its dependency file is `rail_app/requirements.txt`.
    - **Repository:** `tedydevmac/goongoongobeyond`
    - **Branch:** `main`
    - **Main file path:** `rail_app/app.py`
+   - **Python version:** `3.12` in **Advanced settings**
 4. Click **Deploy**. Streamlit Cloud installs the dependencies from
    `rail_app/requirements.txt` and serves the app at a public `streamlit.app`
    URL.
+
+If the existing app was created with another Python version, open its
+**Settings**, choose **Python 3.12** under the Python version setting, save,
+and rebuild the app. The checked-in `runtime.txt` documents the required
+version, but the dashboard setting takes precedence on Community Cloud.
 
 The app does not require secrets or a database. Uploaded files are processed
 in memory during the prediction request and are removed when that request
