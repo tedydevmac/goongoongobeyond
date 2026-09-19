@@ -4,3 +4,4 @@ openpyxl
 numpy
 xgboost
 PyWavelets
+tensorflow>=2.20,<2.22

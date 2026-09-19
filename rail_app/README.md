@@ -18,7 +18,7 @@ app/
     rail_corrugation.py         # WORKING — wraps the two-stage model
     door.py                     # schema-tolerant segmentation baseline
     acv.py                      # schema-tolerant car-localisation baseline
-    shm.py                      # stress-derived damage baseline
+    shm.py                      # trained Keras damage regression model
   models/
     rail_corrugation/            # put stage1_model.json, stage2_model.json, config.json here
     door/  acv/  shm/            # put each subsystem's trained model artifact(s) here
@@ -81,14 +81,11 @@ stay usable.
 
 ## 3. Door / ACV / SHM baselines
 
-The three modules include runnable, deterministic baselines because the
-training datasets and trained artifacts are not part of this repository.
-`Door` detects contiguous opening/closing activity and flags robust current
-outliers, `ACV` ranks cars by cross-car telemetry anomaly, and `SHM` computes
-a non-negative turning-point stress damage proxy. Each returns the exact
-submission schema and reports progress to the app. Replace the internal
-baseline with a trained artifact when the labelled datasets are available;
-the public plugin contract and upload flow do not need to change.
+Door and ACV include runnable baselines while their trained artifacts are
+being developed. SHM now loads `models/shm/regression_model.keras`, flattens
+the numeric CSV readings, resamples them to the model's required input length,
+and returns the model's numeric regression output. TensorFlow is loaded only
+when SHM inference is requested, and the model is cached for the session.
 
 Nothing else needs to change — `app.py` and the registry are already
 generic over `INPUT_MODE` ("multi_file" vs "single_stream") and read
