@@ -99,7 +99,7 @@ with st.sidebar:
     st.caption("Rail vehicle condition monitoring")
     st.divider()
     st.markdown("### Workflow")
-    st.markdown("1. Select a subsystem\n2. Upload its sensor data\n3. Review the result\n4. Download the submission CSV")
+    st.markdown("1. Select a subsystem\n2. Upload its sensor data\n3. Review the result\n4. Download the results CSV")
 
 st.markdown(
     """
